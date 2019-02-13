@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Author: kai.shen@mujin.co.jp
+# Author: cylisery@outlook.com
 # Date: 2019.01.17
 
 from multiprocessing import Pool
