@@ -27,7 +27,7 @@ def FindShortestUnlockPath(target, deadends):
     path = deque(['0000'])
     visited = set(deadends)
     depth = -1
-    
+
     parent = {}
     parent['0000'] = None
 
@@ -45,7 +45,7 @@ def FindShortestUnlockPath(target, deadends):
                 print ' '.join(route)
 
                 return depth
-            
+
             if curState in visited:
                 continue
             visited.add(curState)
@@ -53,7 +53,8 @@ def FindShortestUnlockPath(target, deadends):
             path.extend(nextStates)
 
             for state in nextStates:
-                parent[state] = curState
+                if state not in visited:
+                    parent[state] = curState
 
     return -1
 
