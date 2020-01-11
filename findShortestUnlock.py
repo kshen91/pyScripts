@@ -15,7 +15,7 @@ def timing(f):
     return wrap
 
 @timing
-def FindShortestUnlockPath(target, deadlocks):
+def FindShortestUnlockPath(target, deadends):
     '''
     target: a four digits number, like "1234"
     deadlocks: a list of four digits number, which can not pass
@@ -24,53 +24,43 @@ def FindShortestUnlockPath(target, deadlocks):
     if '0000' in deadlocks:
         return -1
 
-    path = deque()
-    visited = []
-    shortestLength = {}
+    path = deque(['0000'])
+    visited = set(deadlocks)
+    depth = -1
+    
     parent = {}
-
-    path.append('0000')
-    shortestLength['0000'] = 0
     parent['0000'] = None
 
-    while len(path) > 0:
-        curState = path.popleft()
-        if curState == target:
-            # find target
-            ret = shortestLength[curState]
+    while path:
+        size = len(path)
+        depth += 1
+        for _ in xrange(size):
+            curState = path.popleft()
+            if curState == target:
+                # find target & print route for information
+                route = deque()
+                while curState is not None:
+                    route.appendleft(curState)
+                    curState = parent[curState]
+                print ' '.join(route)
 
-            # also print route for information
-            route = deque()
-            while curState is not None:
-                route.appendleft(curState)
-                curState = parent[curState]
-            print ' '.join(route)
+                return depth
+            
+            if curState in visited:
+                continue
+            visited.add(curState)
+            nextStates = GetAdjacencies(curState, deadlocks)
+            path.extend(nextStates)
 
-            return ret
-
-        nextStates = GetAdjacencies(curState, deadlocks)
-        visited.append(curState)
-        if len(nextStates) == 0:
-            # no more steps can move
-            return -1
-
-        for state in nextStates:
-            if state not in path and state not in visited:
-                path.append(state)
-                shortestLength[state] = shortestLength[curState] + 1
+            for state in nextStates:
                 parent[state] = curState
 
     return -1
 
-def GetAdjacencies(state, deadlocks):
-    ret = []
-    stateList = list(state)
-    for i in range(4):
-        plusOneState = ''.join(stateList[:i] + [str((int(stateList[i])+1)%10)] + stateList[i+1:])
-        minusOneState = ''.join(stateList[:i] + [str((int(stateList[i])-1)%10)] + stateList[i+1:])
-        if plusOneState not in deadlocks:
-            ret.append(plusOneState)
-        if minusOneState not in deadlocks:
-            ret.append(minusOneState)
-
-    return ret
+def GetAdjacencies(state):
+    res = []
+    for i, ch in enumerate(state):
+        num = int(ch)
+        res.append(src[:i] + str((num - 1) % 10) + src[i+1:])
+        res.append(src[:i] + str((num + 1) % 10) + src[i+1:])
+    return res
