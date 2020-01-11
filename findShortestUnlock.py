@@ -21,11 +21,11 @@ def FindShortestUnlockPath(target, deadends):
     deadlocks: a list of four digits number, which can not pass
     '''
 
-    if '0000' in deadlocks:
+    if '0000' in deadends:
         return -1
 
     path = deque(['0000'])
-    visited = set(deadlocks)
+    visited = set(deadends)
     depth = -1
     
     parent = {}
