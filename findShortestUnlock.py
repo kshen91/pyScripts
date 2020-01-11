@@ -49,7 +49,7 @@ def FindShortestUnlockPath(target, deadends):
             if curState in visited:
                 continue
             visited.add(curState)
-            nextStates = GetAdjacencies(curState, deadlocks)
+            nextStates = GetAdjacencies(curState)
             path.extend(nextStates)
 
             for state in nextStates:
