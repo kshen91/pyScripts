@@ -61,6 +61,6 @@ def GetAdjacencies(state):
     res = []
     for i, ch in enumerate(state):
         num = int(ch)
-        res.append(src[:i] + str((num - 1) % 10) + src[i+1:])
-        res.append(src[:i] + str((num + 1) % 10) + src[i+1:])
+        res.append(state[:i] + str((num - 1) % 10) + state[i+1:])
+        res.append(state[:i] + str((num + 1) % 10) + state[i+1:])
     return res
